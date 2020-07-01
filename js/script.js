@@ -67,7 +67,8 @@ window.addEventListener("DOMContentLoaded", () => {
             popUpOpacityValue = 0;
 
         const applyPopUpAnimation = () => {
-            if(popUpOpacityValue >= 1.5 || document.body.clientWidth < 768) {
+            if(popUpOpacityValue >= 1.5) {
+                popUpOpacityValue = 0;
                 return cancelAnimationFrame(popUpAnimID);
             }
             popUpOpacityValue += 0.014;
@@ -78,7 +79,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
         popUpButtonsOpen.forEach(button => button.addEventListener("click", () => {
             popUp.style.display = "block"; 
-            applyPopUpAnimation();
+            if(document.body.clientWidth >= 768) { // ограничение, (от 768 px)
+                applyPopUpAnimation();
+            }
         }));
         popUpButtonClose.addEventListener("click", () => popUp.style.display = "none");
     };
