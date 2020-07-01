@@ -46,7 +46,13 @@ window.addEventListener("DOMContentLoaded", () => {
         const menuAction = () => menu.classList.toggle('active-menu');
         buttonMenuOpen.addEventListener("click", menuAction);
         buttonMenuClose.addEventListener("click", menuAction);
-        menuItems.forEach(item => item.addEventListener("click", menuAction));
+        menuItems.forEach(
+            item => item.addEventListener("click", (event) => {
+                event.preventDefault(); // отменяем событие якоря
+                document.querySelector(item.firstChild.hash).scrollIntoView({block: "center", behavior: "smooth"}); 
+                // делаем плавный скролл
+            }
+        ));
 
 
 
