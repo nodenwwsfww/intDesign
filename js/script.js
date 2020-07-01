@@ -36,7 +36,54 @@ window.addEventListener("DOMContentLoaded", () => {
     setInterval(updateLeftTime, 1000, "30 jun 2020"); // рандомные цифры
     // setInterval(updateLeftTime, 1000, "28 jun 2020"); // отрицательное значение
 
+    // Меню
+    const toggleMenu = () => {
+        const buttonMenuOpen = document.querySelector(".menu"),
+            menu = document.querySelector("menu"),
+            buttonMenuClose = document.querySelector(".close-btn"),
+            menuItems = menu.querySelectorAll("ul>li");
+
+        const menuAction = () => menu.classList.toggle('active-menu');
+        buttonMenuOpen.addEventListener("click", menuAction);
+        buttonMenuClose.addEventListener("click", menuAction);
+        menuItems.forEach(item => item.addEventListener("click", menuAction));
+
+
+
+    };
+
+    toggleMenu();
+
+    // popup
+
+    const togglePopUp = () => {
+        const 
+            popUp = document.querySelector(".popup"),
+            popUpButtonsOpen = document.querySelectorAll(".popup-btn"),
+            popUpButtonClose = document.querySelector(".popup-close");
+
+        let 
+            popUpAnimID = -1,
+            popUpOpacityValue = 0;
+
+        const applyPopUpAnimation = () => {
+            if(popUpOpacityValue >= 1.5 || document.body.clientWidth < 768) {
+                return cancelAnimationFrame(popUpAnimID);
+            }
+            popUpOpacityValue += 0.014;
+            popUp.style.opacity = popUpOpacityValue;
+
+            popUpAnimID = requestAnimationFrame(applyPopUpAnimation);
+        };
+
+        popUpButtonsOpen.forEach(button => button.addEventListener("click", () => {
+            popUp.style.display = "block"; 
+            applyPopUpAnimation();
+        }));
+        popUpButtonClose.addEventListener("click", () => popUp.style.display = "none");
+    };
+
+    togglePopUp();
 });
-// Другое задание в отдельной папке other
 
 
