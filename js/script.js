@@ -41,25 +41,12 @@ window.addEventListener("DOMContentLoaded", () => {
         const buttonMenuOpen = document.querySelector(".menu"),
             menu = document.querySelector("menu"),
             buttonMenuClose = document.querySelector(".close-btn"),
-            menuItems = menu.querySelectorAll("ul>li"),
-
-            mouseScroll = document.querySelector("a[href='#service-block']");
+            menuItems = menu.querySelectorAll("ul>li");
 
         const menuAction = () => menu.classList.toggle('active-menu');
-        const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
         buttonMenuOpen.addEventListener("click", menuAction);
         buttonMenuClose.addEventListener("click", menuAction);
-        menuItems.forEach(
-            item => item.addEventListener("click", (event) => {
-                event.preventDefault(); // отменяем событие якоря
-                smoothScroll(document.querySelector(item.firstChild.hash));
-                // делаем плавный скролл
-            }
-        ));
-        mouseScroll.addEventListener("click", () => {
-            event.preventDefault(); // отменяем событие якоря
-            smoothScroll(document.querySelector(mouseScroll.hash));
-        });
+        menuItems.forEach(item => item.addEventListener("click", menuAction));
 
 
 
@@ -80,7 +67,8 @@ window.addEventListener("DOMContentLoaded", () => {
             popUpOpacityValue = 0;
 
         const applyPopUpAnimation = () => {
-            if(popUpOpacityValue >= 1.5 || document.body.clientWidth < 768) {
+            if(popUpOpacityValue >= 1.5) {
+                popUpOpacityValue = 0;
                 return cancelAnimationFrame(popUpAnimID);
             }
             popUpOpacityValue += 0.014;
@@ -91,7 +79,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
         popUpButtonsOpen.forEach(button => button.addEventListener("click", () => {
             popUp.style.display = "block"; 
-            applyPopUpAnimation();
+            if(document.body.clientWidth >= 768) { // ограничение, (от 768 px)
+                applyPopUpAnimation();
+            }
         }));
         popUpButtonClose.addEventListener("click", () => popUp.style.display = "none");
     };
