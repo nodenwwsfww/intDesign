@@ -41,15 +41,26 @@ window.addEventListener("DOMContentLoaded", () => {
         const buttonMenuOpen = document.querySelector(".menu"),
             menu = document.querySelector("menu"),
             buttonMenuClose = document.querySelector(".close-btn"),
-            menuItems = menu.querySelectorAll("ul>li");
+            menuItems = menu.querySelectorAll("ul>li"),
+
+            mouseScroll = document.querySelector("a[href='#service-block']");
 
         const menuAction = () => menu.classList.toggle('active-menu');
+        const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
         buttonMenuOpen.addEventListener("click", menuAction);
         buttonMenuClose.addEventListener("click", menuAction);
-        menuItems.forEach(item => item.addEventListener("click", menuAction));
-
-
-
+        menuItems.forEach(
+            item => item.addEventListener("click", (event) => {
+                event.preventDefault(); // отменяем событие якоря
+                smoothScroll(document.querySelector(item.firstChild.hash));
+                menuAction();
+                // делаем плавный скролл
+            }
+        ));
+        mouseScroll.addEventListener("click", () => {
+            event.preventDefault(); // отменяем событие якоря
+            smoothScroll(document.querySelector(mouseScroll.hash));
+        });
     };
 
     toggleMenu();
