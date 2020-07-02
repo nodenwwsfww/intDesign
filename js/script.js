@@ -55,6 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 event.preventDefault(); // отменяем событие якоря
                 smoothScroll(document.querySelector(target.hash));
+                menuAction();
                 // делаем плавный скролл
             } else if(menu.classList.contains("active-menu")) { // закрытие меню (когда нажимаешь вне окна)
                      menuAction();
@@ -102,7 +103,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }));
         popUp.addEventListener("click", event => {
             let target = event.target;
-            console.log('target: ', target);
             if(target.classList.contains("popup-close")) {
                 popUp.style.display = "none";
             } else {
