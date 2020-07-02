@@ -153,14 +153,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const slideCollection = document.querySelectorAll(".portfolio-item"),
             slideButtons = document.querySelectorAll("portfolio-btn"),
-            slidePoints = document.querySelectorAll(".dot"),
             slideParent = document.querySelector(".portfolio-content");
+        
+        let slidePoints = document.querySelectorAll(".dot");
         
         let currentSlide = 0;
         let slideInterval;
         // auto-play
         const toggleActiveElement = (element, strClass) => element.classList.toggle(strClass);
-        
         const autoPlaySlide = () => {
             // Отключаем текущий слайд
             toggleActiveElement(slideCollection[currentSlide], "portfolio-item-active");
@@ -219,6 +219,19 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        const addSlidePoints = () => {
+            slideCollection.forEach( (item, index) => {
+                const li = document.createElement("li");
+                li.classList.add("dot");
+                if(index === 0) {
+                    li.classList.add("dot-active");
+                }
+                document.querySelector(".portfolio-dots").append(li);
+            });
+            slidePoints = document.querySelectorAll(".dot");
+        };
+
+        addSlidePoints();
         startSlider(1500);
 
     };
