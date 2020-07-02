@@ -39,24 +39,31 @@ window.addEventListener("DOMContentLoaded", () => {
     const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
     // Меню
     const toggleMenu = () => {
-        const menu = document.querySelector("menu"),
-            menuAction = () => menu.classList.toggle('active-menu');
+        const menu = document.querySelector("menu");
+        
+        const menuAction = () => menu.classList.toggle('active-menu');
 
         document.body.addEventListener("click", event => {
             let target = event.target;
 
-            if(target.classList.contains("close-btn") || target.classList.contains("menu")) { // закрытие/открытие меню
+            if(target.classList.contains("close-btn") || target.closest(".menu")) { // закрытие/открытие меню
+                console.log(1)
                 return menuAction();
             }
-            
-            if(target.tagName === "A") { // Если это элемент из списка навигации
+
+            target = target.closest("menu>ul>li>a");
+            if(target) { // Если это элемент из списка навигации
 
                 event.preventDefault(); // отменяем событие якоря
                 smoothScroll(document.querySelector(target.hash));
                 // делаем плавный скролл
-                menuAction();
-            } else { // закрытие меню (когда нажимаешь вне окна)
-                menuAction();
+                console.log(2);
+                return menuAction();
+            } 
+            console.log(menu.classList);
+            if(menu.classList.contains("active-menu")) { // закрытие меню (когда нажимаешь вне окна)
+                    menuAction();
+                    console.log(menu.classList);
             }
 
         });
