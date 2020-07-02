@@ -36,37 +36,43 @@ window.addEventListener("DOMContentLoaded", () => {
     setInterval(updateLeftTime, 1000, "30 jun 2020"); // рандомные цифры
     // setInterval(updateLeftTime, 1000, "28 jun 2020"); // отрицательное значение
 
+    const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
     // Меню
     const toggleMenu = () => {
         const buttonMenuOpen = document.querySelector(".menu"),
             menu = document.querySelector("menu"),
-            buttonMenuClose = document.querySelector(".close-btn"),
-            menuItems = menu.querySelectorAll("ul>li"),
-
-            mouseScroll = document.querySelector("a[href='#service-block']");
-
-        const menuAction = () => menu.classList.toggle('active-menu');
-        const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
+            menuAction = () => menu.classList.toggle('active-menu');
+            
         buttonMenuOpen.addEventListener("click", menuAction);
-        buttonMenuClose.addEventListener("click", menuAction);
-        menuItems.forEach(
-            item => item.addEventListener("click", (event) => {
-                event.preventDefault(); // отменяем событие якоря
-                smoothScroll(document.querySelector(item.firstChild.hash));
-                // делаем плавный скролл
-            }
-        ));
-        mouseScroll.addEventListener("click", () => {
-            event.preventDefault(); // отменяем событие якоря
-            smoothScroll(document.querySelector(mouseScroll.hash));
-        });
         menu.addEventListener("click", event => {
-            // let target = event.target.closest(".");
-            // if(!target)
+            let target = event.target;
+
+            if(target.classList.contains("close-btn")) {
+                return menuAction();
+            }
+
+            target = target.closest("menu>ul>li>a");
+            if(target) { // Если это элемент из списка навигации
+
+                event.preventDefault(); // отменяем событие якоря
+                smoothScroll(document.querySelector(target.hash));
+                // делаем плавный скролл
+                menuAction();
+            }
+
         });
     };
     toggleMenu();
 
+    // mouse (переход на другой слайд)
+    const mouseAction = () => {
+        const mouseScroll = document.querySelector("a[href='#service-block']");
+        mouseScroll.addEventListener("click", () => {
+            event.preventDefault(); // отменяем событие якоря
+            smoothScroll(document.querySelector(mouseScroll.hash));
+        });
+    };
+    mouseAction();
     // popup
 
     const togglePopUp = () => {
@@ -96,11 +102,12 @@ window.addEventListener("DOMContentLoaded", () => {
         }));
         popUp.addEventListener("click", event => {
             let target = event.target;
+            console.log('target: ', target);
             if(target.classList.contains("popup-close")) {
                 popUp.style.display = "none";
             } else {
                 target = target.closest(".popup-content");
-                if(!target) {
+                if(!target) { // если нажали за пределами нашего окна, то закрываем окно
                     popUp.style.display = "none";
                 }
             }
