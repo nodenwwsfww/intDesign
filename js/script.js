@@ -47,7 +47,6 @@ window.addEventListener("DOMContentLoaded", () => {
             let target = event.target;
 
             if(target.classList.contains("close-btn") || target.closest(".menu")) { // закрытие/открытие меню
-                console.log(1)
                 return menuAction();
             }
 
@@ -57,13 +56,8 @@ window.addEventListener("DOMContentLoaded", () => {
                 event.preventDefault(); // отменяем событие якоря
                 smoothScroll(document.querySelector(target.hash));
                 // делаем плавный скролл
-                console.log(2);
-                return menuAction();
-            } 
-            console.log(menu.classList);
-            if(menu.classList.contains("active-menu")) { // закрытие меню (когда нажимаешь вне окна)
-                    menuAction();
-                    console.log(menu.classList);
+            } else if(menu.classList.contains("active-menu")) { // закрытие меню (когда нажимаешь вне окна)
+                     menuAction();
             }
 
         });
