@@ -102,7 +102,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }));
         popUp.addEventListener("click", event => {
             let target = event.target;
-            console.log('target: ', target);
             if(target.classList.contains("popup-close")) {
                 popUp.style.display = "none";
             } else {
@@ -153,14 +152,32 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const slideCollection = document.querySelectorAll(".portfolio-item"),
             slideButtons = document.querySelectorAll("portfolio-btn"),
-            slidePoints = document.querySelectorAll(".dot"),
+            slidePointsParent = document.querySelector(".portfolio-dots"),
             slideParent = document.querySelector(".portfolio-content");
         
         let currentSlide = 0;
         let slideInterval;
+        let slidePoints = document.querySelectorAll(".dot");
+
+        const addSlidePoint = () => {
+            const newPoint = document.createElement("li");
+            newPoint.classList.add("dot");
+            if(!slidePoints.length) {
+                newPoint.classList.add("dot-active");
+            }
+            slidePointsParent.appendChild(newPoint);
+            slidePoints = document.querySelectorAll(".dot");
+
+        };
+        const clearAllSlidePoints = () => {
+            slidePoints.forEach( element => {
+                element.remove();
+            });
+        };
         // auto-play
-        const toggleActiveElement = (element, strClass) => element.classList.toggle(strClass);
-        
+        const toggleActiveElement = (element, strClass) => {
+            element.classList.toggle(strClass);
+        };
         const autoPlaySlide = () => {
             // Отключаем текущий слайд
             toggleActiveElement(slideCollection[currentSlide], "portfolio-item-active");
@@ -169,12 +186,21 @@ window.addEventListener("DOMContentLoaded", () => {
             currentSlide++;
             if(currentSlide >= slideCollection.length) {
                 currentSlide = 0;
+                clearAllSlidePoints();
+                addSlidePoint();
+            } else if(currentSlide + 1 >= slidePoints.length) {
+                addSlidePoint();
             }
             // Переключаем на новый слайд
             toggleActiveElement(slideCollection[currentSlide], "portfolio-item-active");
             toggleActiveElement(slidePoints[currentSlide], "dot-active");
         };
-        const startSlider = (time=1500) => slideInterval = setInterval(autoPlaySlide, 1500);
+        const startSlider = (time=6000) => {
+            if(!slidePoints.length) {
+                addSlidePoint();
+            }
+            slideInterval = setInterval(autoPlaySlide, time);
+        };
         const stopSlider = () => clearInterval(slideInterval);
 
         slideParent.addEventListener("click", event => {
@@ -191,14 +217,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if(target.matches("#arrow-right")) {
                 currentSlide++;
-            } else  if(target.matches("#arrow-left")) {
-                currentSlide--;
+                if(currentSlide + 1 > slidePoints.length) {
+                    addSlidePoint();
+                }
+            } else if(target.matches("#arrow-left")) {
+                if(currentSlide > 0) {
+                    currentSlide--;
+                }
             } else if(target.matches(".dot")) {
                 currentSlide = [...target.parentNode.children].indexOf(target);
             }
 
             if(currentSlide >= slideCollection.length) {
                 currentSlide = 0;
+                currentSlide = 0;
+                clearAllSlidePoints();
+                addSlidePoint();
             } else if(currentSlide < 0) {
                 currentSlide = slideCollection.length - 1;
             }
@@ -219,7 +253,7 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        startSlider(1500);
+        startSlider(6000);
 
     };
     slideHandler();
