@@ -51,8 +51,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 return menuAction();
             }
 
-            target = target.closest("menu>ul>li>a");
-            if(target) { // Если это элемент из списка навигации
+            if(target.tagName === "A") { // Если это элемент из списка навигации
 
                 event.preventDefault(); // отменяем событие якоря
                 smoothScroll(document.querySelector(target.hash));
