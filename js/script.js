@@ -50,14 +50,18 @@ window.addEventListener("DOMContentLoaded", () => {
                 return menuAction();
             }
 
-            target = target.closest("menu>ul>li>a");
-            if(target) { // Если это элемент из списка навигации
+            if(!target.closest(".active-menu") && menu.classList.contains("active-menu")) { 
+                // закрытие меню (когда нажимаешь вне окна)
+                return menuAction();
+            } else {
+                target = target.closest("menu>ul>li>a");
+                if(target) { // Если это элемент из списка навигации
 
-                event.preventDefault(); // отменяем событие якоря
-                smoothScroll(document.querySelector(target.hash));
-                // делаем плавный скролл
-            } else if(menu.classList.contains("active-menu")) { // закрытие меню (когда нажимаешь вне окна)
-                     menuAction();
+                    event.preventDefault(); // отменяем событие якоря
+                    smoothScroll(document.querySelector(target.hash));
+                    menuAction();
+                    // делаем плавный скролл
+                }
             }
 
         });
