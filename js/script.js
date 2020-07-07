@@ -36,26 +36,29 @@ window.addEventListener("DOMContentLoaded", () => {
     setInterval(updateLeftTime, 1000, "30 jun 2020"); // рандомные цифры
     // setInterval(updateLeftTime, 1000, "28 jun 2020"); // отрицательное значение
 
-    const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({block: "center", behavior: "smooth"});
+    const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({
+        block: "center",
+        behavior: "smooth"
+    });
     // Меню
     const toggleMenu = () => {
         const menu = document.querySelector("menu");
-        
+
         const menuAction = () => menu.classList.toggle('active-menu');
 
         document.body.addEventListener("click", event => {
             let target = event.target;
 
-            if(target.classList.contains("close-btn") || target.closest(".menu")) { // закрытие/открытие меню
+            if (target.classList.contains("close-btn") || target.closest(".menu")) { // закрытие/открытие меню
                 return menuAction();
             }
 
-            if(!target.closest(".active-menu") && menu.classList.contains("active-menu")) { 
+            if (!target.closest(".active-menu") && menu.classList.contains("active-menu")) {
                 // закрытие меню (когда нажимаешь вне окна)
                 return menuAction();
             } else {
                 target = target.closest("menu>ul>li>a");
-                if(target) { // Если это элемент из списка навигации
+                if (target) { // Если это элемент из списка навигации
 
                     event.preventDefault(); // отменяем событие якоря
                     smoothScroll(document.querySelector(target.hash));
@@ -80,16 +83,16 @@ window.addEventListener("DOMContentLoaded", () => {
     // popup
 
     const togglePopUp = () => {
-        const 
+        const
             popUp = document.querySelector(".popup"),
             popUpButtonsOpen = document.querySelectorAll(".popup-btn");
 
-        let 
+        let
             popUpAnimID = -1,
             popUpOpacityValue = 0;
 
         const applyPopUpAnimation = () => {
-            if(popUpOpacityValue >= 1.5) {
+            if (popUpOpacityValue >= 1.5) {
                 popUpOpacityValue = 0;
                 return cancelAnimationFrame(popUpAnimID);
             }
@@ -99,19 +102,19 @@ window.addEventListener("DOMContentLoaded", () => {
             popUpAnimID = requestAnimationFrame(applyPopUpAnimation);
         };
         popUpButtonsOpen.forEach(button => button.addEventListener("click", () => {
-            popUp.style.display = "block"; 
-            if(document.body.clientWidth >= 768) { // ограничение, (от 768 px)
+            popUp.style.display = "block";
+            if (document.body.clientWidth >= 768) { // ограничение, (от 768 px)
                 applyPopUpAnimation();
             }
         }));
         popUp.addEventListener("click", event => {
             let target = event.target;
             console.log('target: ', target);
-            if(target.classList.contains("popup-close")) {
+            if (target.classList.contains("popup-close")) {
                 popUp.style.display = "none";
             } else {
                 target = target.closest(".popup-content");
-                if(!target) { // если нажали за пределами нашего окна, то закрываем окно
+                if (!target) { // если нажали за пределами нашего окна, то закрываем окно
                     popUp.style.display = "none";
                 }
             }
@@ -126,10 +129,10 @@ window.addEventListener("DOMContentLoaded", () => {
             serviceHeader = document.querySelector(".service-header"),
             serviceHeaderList = serviceHeader.querySelectorAll(".service-header-tab"),
             serviceTabContent = document.querySelectorAll(".service-tab");
-        
+
         const changeTabContent = (targetIndex) => {
-            serviceTabContent.forEach( (content, i) => {
-                if(targetIndex === i) {
+            serviceTabContent.forEach((content, i) => {
+                if (targetIndex === i) {
                     content.classList.remove("d-none");
                     serviceHeaderList[i].classList.add("active"); // делаем выделение
                 } else {
@@ -142,13 +145,13 @@ window.addEventListener("DOMContentLoaded", () => {
         serviceHeader.addEventListener("click", event => {
             let target = event.target.closest(".service-header-tab");
 
-            if(target) {
-                changeTabContent( [...serviceHeaderList].indexOf(target) );
+            if (target) {
+                changeTabContent([...serviceHeaderList].indexOf(target));
             }
 
         });
     };
-        
+
     tabsHandler();
 
     // слайдер
@@ -158,9 +161,9 @@ window.addEventListener("DOMContentLoaded", () => {
         const slideCollection = document.querySelectorAll(".portfolio-item"),
             slideButtons = document.querySelectorAll("portfolio-btn"),
             slideParent = document.querySelector(".portfolio-content");
-        
+
         let slidePoints = document.querySelectorAll(".dot");
-        
+
         let currentSlide = 0;
         let slideInterval;
         // auto-play
@@ -171,21 +174,21 @@ window.addEventListener("DOMContentLoaded", () => {
             toggleActiveElement(slidePoints[currentSlide], "dot-active");
 
             currentSlide++;
-            if(currentSlide >= slideCollection.length) {
+            if (currentSlide >= slideCollection.length) {
                 currentSlide = 0;
             }
             // Переключаем на новый слайд
             toggleActiveElement(slideCollection[currentSlide], "portfolio-item-active");
             toggleActiveElement(slidePoints[currentSlide], "dot-active");
         };
-        const startSlider = (time=1500) => slideInterval = setInterval(autoPlaySlide, 1500);
+        const startSlider = (time = 1500) => slideInterval = setInterval(autoPlaySlide, 1500);
         const stopSlider = () => clearInterval(slideInterval);
 
         slideParent.addEventListener("click", event => {
             event.preventDefault();
             const target = event.target;
 
-            if(!target.matches(".portfolio-btn, .dot")) {
+            if (!target.matches(".portfolio-btn, .dot")) {
                 return;
             }
 
@@ -193,17 +196,17 @@ window.addEventListener("DOMContentLoaded", () => {
             toggleActiveElement(slideCollection[currentSlide], "portfolio-item-active");
             toggleActiveElement(slidePoints[currentSlide], "dot-active");
 
-            if(target.matches("#arrow-right")) {
+            if (target.matches("#arrow-right")) {
                 currentSlide++;
-            } else  if(target.matches("#arrow-left")) {
+            } else if (target.matches("#arrow-left")) {
                 currentSlide--;
-            } else if(target.matches(".dot")) {
+            } else if (target.matches(".dot")) {
                 currentSlide = [...target.parentNode.children].indexOf(target);
             }
 
-            if(currentSlide >= slideCollection.length) {
+            if (currentSlide >= slideCollection.length) {
                 currentSlide = 0;
-            } else if(currentSlide < 0) {
+            } else if (currentSlide < 0) {
                 currentSlide = slideCollection.length - 1;
             }
             // Переключаем на новый слайд
@@ -211,23 +214,23 @@ window.addEventListener("DOMContentLoaded", () => {
             toggleActiveElement(slidePoints[currentSlide], "dot-active");
         });
         slideParent.addEventListener("mouseover", event => {
-            if(event.target.matches(".portfolio-btn, .dot")) {
+            if (event.target.matches(".portfolio-btn, .dot")) {
                 stopSlider();
             }
 
 
         });
         slideParent.addEventListener("mouseout", event => {
-            if(event.target.matches(".portfolio-btn, .dot")) {
+            if (event.target.matches(".portfolio-btn, .dot")) {
                 startSlider();
             }
         });
 
         const addSlidePoints = () => {
-            slideCollection.forEach( (item, index) => {
+            slideCollection.forEach((item, index) => {
                 const li = document.createElement("li");
                 li.classList.add("dot");
-                if(index === 0) {
+                if (index === 0) {
                     li.classList.add("dot-active");
                 }
                 document.querySelector(".portfolio-dots").append(li);
@@ -240,6 +243,23 @@ window.addEventListener("DOMContentLoaded", () => {
 
     };
     slideHandler();
+    // Блок команда (переключение изображений)
+    const teamHandler = () => {
+        const teamBlock = document.querySelector(".command>.container>.row");
+
+        const changeTeamPhoto = event => {
+            const target = event.target;
+
+            if(target.classList.contains("command__photo")) {
+                let copy = target.src;
+                target.src = target.dataset.img;
+                target.dataset.img = copy;
+
+            }
+
+        };
+        teamBlock.addEventListener("mouseover", changeTeamPhoto);
+        teamBlock.addEventListener("mouseout", changeTeamPhoto);
+    }; 
+    teamHandler();
 });
-
-
