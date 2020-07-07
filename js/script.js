@@ -244,22 +244,35 @@ window.addEventListener("DOMContentLoaded", () => {
     };
     slideHandler();
     // Блок команда (переключение изображений)
-    const teamHandler = () => {
+    const teamPhotoHandler = () => {
         const teamBlock = document.querySelector(".command>.container>.row");
 
         const changeTeamPhoto = event => {
             const target = event.target;
 
-            if(target.classList.contains("command__photo")) {
-                let copy = target.src;
+            if (target.classList.contains("command__photo")) {
+                let copySrc = target.src;
                 target.src = target.dataset.img;
-                target.dataset.img = copy;
-
+                target.dataset.img = copySrc;
             }
 
         };
         teamBlock.addEventListener("mouseover", changeTeamPhoto);
         teamBlock.addEventListener("mouseout", changeTeamPhoto);
-    }; 
-    teamHandler();
+    };
+    teamPhotoHandler();
+    // Блок калькулятор
+    const calculaterHandler = () => {
+        const calculateBlock = document.querySelector(".calc-block");
+
+        const inputValidation = event => {
+            const target = event.target;
+
+            if(target.tagName === "INPUT") {
+                target.value = target.value.replace(/\D/, "");
+            }
+        };
+        calculateBlock.addEventListener("input", inputValidation);
+    };
+    calculaterHandler();
 });
