@@ -262,17 +262,56 @@ window.addEventListener("DOMContentLoaded", () => {
     };
     teamPhotoHandler();
     // Блок калькулятор
-    const calculaterHandler = () => {
-        const calculateBlock = document.querySelector(".calc-block");
+    const calculaterHandler = (price = 100) => {
+        const calculaterBlock = document.querySelector(".calc-block"),
+            calculateType = document.querySelector(".calc-type"), // тип объекта
+            calculateSquare = document.querySelector(".calc-square"), // площадь объекта
+            calculateDay = document.querySelector(".calc-day"), // срок исполнения
+            calculateCount = document.querySelector(".calc-count"), // срок исполнения
+            totalValue = document.getElementById("total"); // срок исполнения
 
-        const inputValidation = event => {
-            const target = event.target;
 
-            if(target.tagName === "INPUT") {
+
+        const inputValidation = target => {
+
+            if (target.tagName === "INPUT") {
                 target.value = target.value.replace(/\D/, "");
             }
         };
-        calculateBlock.addEventListener("input", inputValidation);
+        const calculateSum = () => {
+            let totalSum = 0;
+            const typeValue = +calculateType.value,
+                squareValue = +calculateSquare.value;
+
+            let countValue = 1,
+                dayValue = 1;
+
+            if (calculateCount.value > 1) {
+                countValue += (calculateCount.value - 1) / 10;
+            }
+
+            if (calculateDay.value && calculateDay.value < 5) {
+                dayValue *= 2;
+            } else if (calculateDay.value && calculateDay.value < 10) {
+                dayValue *= 1.5;
+            }
+
+            if (typeValue && squareValue) {
+                totalSum = price * typeValue * squareValue * countValue * dayValue;
+                console.log(dayValue);
+            }
+            totalValue.textContent = totalSum;
+        };
+        calculaterBlock.addEventListener("change", event => {
+            const target = event.target;
+
+            if (target.tagName === "INPUT" || target.tagName === "SELECT") {
+                inputValidation(target);
+                calculateSum();
+
+            }
+
+        });
     };
-    calculaterHandler();
+    calculaterHandler(100);
 });
