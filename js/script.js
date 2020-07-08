@@ -326,11 +326,10 @@ window.addEventListener("DOMContentLoaded", () => {
                 dayValue *= 1.5;
             }
 
-            if (typeValue && squareValue) {
+            if (typeValue & squareValue) {
                 totalSum = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
+                applyCountUpAnimation(totalValue, totalSum);
             }
-            applyCountUpAnimation(totalValue, totalSum);
-            // totalValue.textContent = totalSum;
         };
         calculaterBlock.addEventListener("change", event => {
             const target = event.target;
