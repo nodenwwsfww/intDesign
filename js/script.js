@@ -44,6 +44,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const anim = {
             id: -1,
             progress: +target.textContent,
+            duration: 2000, // продолжительность анимации
             direction: true // направление (увеличение/уменьшение)
         };
 
@@ -53,11 +54,17 @@ window.addEventListener("DOMContentLoaded", () => {
             anim.direction = false;
         }
 
-        anim.id = requestAnimationFrame(function animate() {
-            anim.progress = anim.progress + (anim.direction ? 100 : -100);
+        const startTick = performance.now();
+        anim.id = requestAnimationFrame(function animate(currentTick) {
+            if(currentTick - startTick > anim.duration) {
+                return cancelAnimationFrame(anim.id);
+            }
+            let timeCount = Math.ceil( (currentTick - startTick) % anim.duration);
+
+            anim.progress = anim.progress + (anim.direction ? timeCount : -timeCount);
             target.textContent = anim.progress;
             
-            if ( (anim.direction && anim.progress >= number) || (!anim.direction && anim.progress === number)) {
+            if ( (anim.direction && anim.progress >= number) || (!anim.direction && anim.progress <= number)) {
                 cancelAnimationFrame(anim.id);
             } else {
                 anim.id = requestAnimationFrame(animate);
@@ -320,7 +327,7 @@ window.addEventListener("DOMContentLoaded", () => {
             }
 
             if (typeValue && squareValue) {
-                totalSum = price * typeValue * squareValue * countValue * dayValue;
+                totalSum = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
             }
             applyCountUpAnimation(totalValue, totalSum);
             // totalValue.textContent = totalSum;
