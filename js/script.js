@@ -331,7 +331,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 applyCountUpAnimation(totalValue, totalSum);
             }
         };
-        calculaterBlock.addEventListener("change", event => {
+        calculaterBlock.addEventListener("input", event => {
             const target = event.target;
 
             if (target.tagName === "INPUT" || target.tagName === "SELECT") {
