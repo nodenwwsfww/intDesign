@@ -48,23 +48,23 @@ window.addEventListener("DOMContentLoaded", () => {
             direction: true // направление (увеличение/уменьшение)
         };
 
-        if (target.textContent > number) { 
-            // если текущее значение total больше рассчитанного в калькуляторе 
-            // (т.е пользователь уменьшил общую оплату)
+        if (target.textContent > number) {
+        /* если текущее значение total больше рассчитанного в калькуляторе 
+            (т.е пользователь уменьшил общую оплату) */
             anim.direction = false;
         }
 
         const startTick = performance.now();
         anim.id = requestAnimationFrame(function animate(currentTick) {
-            if(currentTick - startTick > anim.duration) {
+            if (currentTick - startTick > anim.duration) {
                 return cancelAnimationFrame(anim.id);
             }
-            let timeCount = Math.ceil( (currentTick - startTick) % anim.duration);
+            let timeCount = Math.ceil((currentTick - startTick) % anim.duration);
 
             anim.progress = anim.progress + (anim.direction ? timeCount : -timeCount);
             target.textContent = anim.progress;
-            
-            if ( (anim.direction && anim.progress >= number) || (!anim.direction && anim.progress <= number)) {
+
+            if ((anim.direction && anim.progress >= number) || (!anim.direction && anim.progress <= number)) {
                 cancelAnimationFrame(anim.id);
             } else {
                 anim.id = requestAnimationFrame(animate);
