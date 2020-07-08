@@ -36,10 +36,35 @@ window.addEventListener("DOMContentLoaded", () => {
     setInterval(updateLeftTime, 1000, "30 jun 2020"); // рандомные цифры
     // setInterval(updateLeftTime, 1000, "28 jun 2020"); // отрицательное значение
 
-    const smoothScroll = (scrollToElement) => scrollToElement.scrollIntoView({
+    const smoothScroll = scrollToElement => scrollToElement.scrollIntoView({
         block: "center",
         behavior: "smooth"
     });
+    const applyCountUpAnimation = (target, number) => {
+        const anim = {
+            id: -1,
+            progress: +target.textContent,
+            direction: true // направление (увеличение/уменьшение)
+        };
+
+        if (target.textContent > number) { 
+            // если текущее значение total больше рассчитанного в калькуляторе 
+            // (т.е пользователь уменьшил общую оплату)
+            anim.direction = false;
+        }
+
+        anim.id = requestAnimationFrame(function animate() {
+            anim.progress = anim.progress + (anim.direction ? 100 : -100);
+            target.textContent = anim.progress;
+            console.log(anim.progress);
+            
+            if ( (anim.direction && anim.progress >= number) || (!anim.direction && anim.progress === number)) {
+                cancelAnimationFrame(anim.id);
+            } else {
+                anim.id = requestAnimationFrame(animate);
+            }
+        });
+    };
     // Меню
     const toggleMenu = () => {
         const menu = document.querySelector("menu");
@@ -298,9 +323,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (typeValue && squareValue) {
                 totalSum = price * typeValue * squareValue * countValue * dayValue;
-                console.log(dayValue);
             }
-            totalValue.textContent = totalSum;
+            applyCountUpAnimation(totalValue, totalSum);
+            // totalValue.textContent = totalSum;
         };
         calculaterBlock.addEventListener("change", event => {
             const target = event.target;
