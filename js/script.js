@@ -56,7 +56,6 @@ window.addEventListener("DOMContentLoaded", () => {
         anim.id = requestAnimationFrame(function animate() {
             anim.progress = anim.progress + (anim.direction ? 100 : -100);
             target.textContent = anim.progress;
-            console.log(anim.progress);
             
             if ( (anim.direction && anim.progress >= number) || (!anim.direction && anim.progress === number)) {
                 cancelAnimationFrame(anim.id);
@@ -134,7 +133,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }));
         popUp.addEventListener("click", event => {
             let target = event.target;
-            console.log('target: ', target);
             if (target.classList.contains("popup-close")) {
                 popUp.style.display = "none";
             } else {
