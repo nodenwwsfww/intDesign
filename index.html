@@ -418,6 +418,31 @@
 		</div>
 	</div>
 </div>
-	<script src="js/script.js" defer></script>
+	<script src="assets/validator.js"></script>
+	<script>
+		// Валидатор
+		const valid = new Validator({
+			selector: "#form1",
+			pattern: {
+				name: /^\[а-я]+$/i
+			},
+			method: {
+				name: [
+					['notEmpty'],
+					['pattern', 'name'] // проверяет поле по определенному паттерну
+				],
+				email: [
+					['notEmpty'],
+					['pattern', 'email'] // проверяет поле по определенному паттерну
+				],
+				phone: [
+					['notEmpty'],
+					['pattern', 'phone'] // проверяет поле по определенному паттерну
+				]
+			}
+		});
+		valid.init();
+	</script>
+	<script src="js/script.js"></script>
 </body>
 </html>
