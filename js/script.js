@@ -61,14 +61,16 @@ window.addEventListener("DOMContentLoaded", () => {
             }
             let timeCount = Math.ceil((currentTick - startTick) % anim.duration);
 
-            anim.progress = anim.progress + (anim.direction ? timeCount : -timeCount);
-            target.textContent = anim.progress;
+            let newProgressValue = anim.progress + (anim.direction ? timeCount : -timeCount);
 
-            if ((anim.direction && anim.progress >= number) || (!anim.direction && anim.progress <= number)) {
+            if ((anim.direction && newProgressValue > number) || (!anim.direction && newProgressValue <= number)) {
+                anim.progress = number;
                 cancelAnimationFrame(anim.id);
             } else {
+                anim.progress = newProgressValue;
                 anim.id = requestAnimationFrame(animate);
             }
+            target.textContent = anim.progress;
         });
     };
     // Меню
@@ -326,7 +328,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 dayValue *= 1.5;
             }
 
-            if (typeValue & squareValue) {
+            if (typeValue && squareValue) {
                 totalSum = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
                 applyCountUpAnimation(totalValue, totalSum);
             }
