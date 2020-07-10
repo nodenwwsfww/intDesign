@@ -348,13 +348,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // send-ajax-form
 
-    const sendForm = () => {
+    const formHandler = () => {
         // messages
         const errorMessage = "Что-то пошло не так",
             loadMessage = "Загрузка...",
             successMessage = "Спасибо! Ваша заявка отправлена на обработку";
 
-        const form = document.getElementById("form1");
+        const allForms = document.querySelectorAll("form");
 
         const statusMessage = document.createElement("div");
         statusMessage.style.cssText = "font-size: 2rem;";
@@ -383,7 +383,18 @@ window.addEventListener("DOMContentLoaded", () => {
             request.send(JSON.stringify(body));
         };
 
-        form.addEventListener("submit", event => {
+        document.body.addEventListener("submit", event => {
+            if(event.target.tagName.toLowerCase() !== "form") {
+                return;
+            }
+            const form = event.target;
+            [...form.querySelectorAll("input")].forEach( item => {
+                if(item.tagName.toLowerCase() === "input") {
+                    item.value = "";
+                    // item.removeAttribute("required");
+                }
+            });
+
             event.preventDefault();
             form.append(statusMessage);
             const formData = new FormData(form);
@@ -402,5 +413,5 @@ window.addEventListener("DOMContentLoaded", () => {
 
     };
 
-    sendForm();
+    formHandler();
 });
