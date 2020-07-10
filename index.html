@@ -421,10 +421,10 @@
 	<script src="assets/validator.js"></script>
 	<script>
 		// Валидатор
-		const valid = new Validator({
+		const valid1 = new Validator({
 			selector: "#form1",
 			pattern: {
-				name: /^\[а-я]+$/i
+				// name: /^\[а-я]+$/i
 			},
 			method: {
 				name: [
@@ -441,7 +441,54 @@
 				]
 			}
 		});
-		valid.init();
+		//
+		valid1.init();
+		const valid2 = new Validator({
+			selector: "#form2",
+			pattern: {
+				message: /^[а-яa-z, ]*$/i
+			},
+			method: {
+				message: [
+					['notEmpty'],
+					['pattern', 'message'] // проверяет поле по определенному паттерну
+				],
+				name: [
+					['notEmpty'],
+					['pattern', 'name'] // проверяет поле по определенному паттерну
+				],
+				email: [
+					['notEmpty'],
+					['pattern', 'email'] // проверяет поле по определенному паттерну
+				],
+				phone: [
+					['notEmpty'],
+					['pattern', 'phone'] // проверяет поле по определенному паттерну
+				]
+			}
+		});
+		valid2.init();
+		//
+		const valid3 = new Validator({
+			selector: "#form3",
+			pattern: {
+			},
+			method: {
+				name: [
+					['notEmpty'],
+					['pattern', 'name'] // проверяет поле по определенному паттерну
+				],
+				email: [
+					['notEmpty'],
+					['pattern', 'email'] // проверяет поле по определенному паттерну
+				],
+				phone: [
+					['notEmpty'],
+					['pattern', 'phone'] // проверяет поле по определенному паттерну
+				]
+			}
+		});
+		valid3.init();
 	</script>
 	<script src="js/script.js"></script>
 </body>

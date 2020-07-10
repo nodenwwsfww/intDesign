@@ -5,7 +5,8 @@ class Validator {
         pattern = {},
         method
     }) {
-        this.form = document.querySelector(selector);
+        this.selector = selector;
+        this.form = document.querySelector(this.selector);
 
         this._formElements = [...this.form].filter
         (elem => elem.tagName.toLowerCase() !== "button" && elem.type !== "button");
@@ -37,7 +38,7 @@ class Validator {
             }
         };
         if(this._method) {
-            const method = this._method[elem.id];
+            const method = this._method[elem.id.slice(6)];
             if(method) {
                 return method.every(item => validatorMethod[item[0]](elem, this._pattern[item[1]]));
             }
@@ -48,10 +49,13 @@ class Validator {
     }
     checkIt(event) {
         const target = event.target;
+        console.log(target);
         if (this.isValid(target)) {
+            console.log("success");
             this.showSuccess(target);
             this._errors.delete(target);
         } else {
+            console.log("error");
             if(event.submitEvent) {
                 event.submitEvent.preventDefault();
             }
@@ -69,6 +73,7 @@ class Validator {
         errorDiv.textContent = "В данном поле допущена ошибка";
         errorDiv.classList.add("validator-error");
         elem.insertAdjacentElement("afterend", errorDiv);
+        console.log("показ ошибки");
     }
 
     showSuccess(elem) {
@@ -77,6 +82,7 @@ class Validator {
             elem.nextElementSibling.remove();
         }
         elem.classList.add("success");
+        console.log('elem: ', elem);
     }
 
     applyStyle() {
@@ -98,6 +104,7 @@ class Validator {
     }
 
     setPattern() {
+        this._pattern.name = this._pattern.name ? this._pattern.name : /^[а-я]+$/i;
         this._pattern.phone = this._pattern.phone ? this._pattern.phone : /^(\+)?[783]([-()]*\d){10}$/;
         this._pattern.email = this._pattern.email ? this._pattern.email : /^\w+@+\w+\.\w{1,3}$/;
     }
