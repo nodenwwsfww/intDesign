@@ -49,8 +49,8 @@ window.addEventListener("DOMContentLoaded", () => {
         };
 
         if (target.textContent > number) {
-        /* если текущее значение total больше рассчитанного в калькуляторе 
-            (т.е пользователь уменьшил общую оплату) */
+            /* если текущее значение total больше рассчитанного в калькуляторе 
+                (т.е пользователь уменьшил общую оплату) */
             anim.direction = false;
         }
 
@@ -345,4 +345,62 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     };
     calculaterHandler(100);
+
+    // send-ajax-form
+
+    const sendForm = () => {
+        // messages
+        const errorMessage = "Что-то пошло не так",
+            loadMessage = "Загрузка...",
+            successMessage = "Спасибо! Ваша заявка отправлена на обработку";
+
+        const form = document.getElementById("form1");
+
+        const statusMessage = document.createElement("div");
+        statusMessage.style.cssText = "font-size: 2rem;";
+
+
+        const postData = (body, succesNotif, errorNotif) => {
+            const request = new XMLHttpRequest();
+
+            request.addEventListener("readystatechange", () => {
+                statusMessage.textContent = loadMessage;
+
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    succesNotif();
+                    statusMessage.textContent = successMessage;
+                } else {
+                    errorNotif(request.status);
+                    statusMessage.textContent = errorMessage;
+                }
+            });
+
+            request.open("POST", "../server.php");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify(body));
+        };
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            form.append(statusMessage);
+            const formData = new FormData(form);
+            let body = {};
+
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+            }, error => {
+                statusMessage.textContent = errorMessage;
+                console.error(error);
+            });
+        });
+
+    };
+
+    sendForm();
 });
