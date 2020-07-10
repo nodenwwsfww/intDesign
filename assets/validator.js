@@ -49,13 +49,10 @@ class Validator {
     }
     checkIt(event) {
         const target = event.target;
-        console.log(target);
         if (this.isValid(target)) {
-            console.log("success");
             this.showSuccess(target);
             this._errors.delete(target);
         } else {
-            console.log("error");
             if(event.submitEvent) {
                 event.submitEvent.preventDefault();
             }
@@ -73,7 +70,6 @@ class Validator {
         errorDiv.textContent = "В данном поле допущена ошибка";
         errorDiv.classList.add("validator-error");
         elem.insertAdjacentElement("afterend", errorDiv);
-        console.log("показ ошибки");
     }
 
     showSuccess(elem) {
@@ -82,7 +78,6 @@ class Validator {
             elem.nextElementSibling.remove();
         }
         elem.classList.add("success");
-        console.log('elem: ', elem);
     }
 
     applyStyle() {
@@ -99,6 +94,7 @@ class Validator {
                 font-size: 12px;
                 font-family: sans-serif;
                 color: red;
+                margin-top: -5px;
 
             }`;
     }
