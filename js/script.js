@@ -390,8 +390,9 @@ window.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             const form = event.target;
 
-            if(statusMessage === form.lastChildElement) {
-                form.lastChildElement.remove();
+            // Удаляем старое сообщение состояние запроса, перед созданием нового сообщения
+            if(statusMessage === form.lastElementChild) {
+                form.lastElementChild.remove();
                 statusMessage.textContent = "";
             }
 
