@@ -387,7 +387,14 @@ window.addEventListener("DOMContentLoaded", () => {
             if(event.target.tagName.toLowerCase() !== "form") {
                 return;
             }
+            event.preventDefault();
             const form = event.target;
+
+            if(statusMessage === form.lastChildElement) {
+                form.lastChildElement.remove();
+                statusMessage.textContent = "";
+            }
+
             [...form.querySelectorAll("input")].forEach( item => {
                 if(item.tagName.toLowerCase() === "input") {
                     item.value = "";
@@ -395,7 +402,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            event.preventDefault();
             form.append(statusMessage);
             const formData = new FormData(form);
             let body = {};
