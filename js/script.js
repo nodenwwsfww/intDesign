@@ -386,11 +386,6 @@ window.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
 
             const form = event.target;
-            [...form.querySelectorAll("input")].forEach( item => {
-                if(item.tagName.toLowerCase() === "input") {
-                    item.value = "";
-                }
-            });
 
             // Удаляем старое сообщение состояние запроса, перед созданием нового сообщения
             if(statusMessage === form.lastElementChild) {
@@ -409,10 +404,22 @@ window.addEventListener("DOMContentLoaded", () => {
             postData(body, () => {
                 statusMessage.textContent = successMessage;
                 form.lastChild.remove();
+                
+                [...form.querySelectorAll("input")].forEach( item => {
+                    if(item.tagName.toLowerCase() === "input") {
+                        item.value = "";
+                    }
+                });
             }, error => {
                 statusMessage.textContent = errorMessage;
                 form.lastChild.remove();
                 console.error(error);
+
+                [...form.querySelectorAll("input")].forEach( item => {
+                    if(item.tagName.toLowerCase() === "input") {
+                        item.value = "";
+                    }
+                });
             });
         });
 
