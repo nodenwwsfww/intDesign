@@ -351,7 +351,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const formHandler = () => {
         // messages
         const errorMessage = "Что-то пошло не так",
-            loadMessage = "Загрузка...",
             successMessage = "Спасибо! Ваша заявка отправлена на обработку";
 
         const allForms = document.querySelectorAll("form");
@@ -360,11 +359,17 @@ window.addEventListener("DOMContentLoaded", () => {
         statusMessage.style.cssText = "font-size: 2rem;";
 
 
+        const applyAnimPreloader = form => {
+            form.insertAdjacentHTML("beforeend",`   
+                <div class="spinner">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>`);
+        };
         const postData = (body, succesNotif, errorNotif) => {
             const request = new XMLHttpRequest();
 
             request.addEventListener("readystatechange", () => {
-                statusMessage.textContent = loadMessage;
 
                 if (request.readyState !== 4) {
                     return;
@@ -391,12 +396,12 @@ window.addEventListener("DOMContentLoaded", () => {
             [...form.querySelectorAll("input")].forEach( item => {
                 if(item.tagName.toLowerCase() === "input") {
                     item.value = "";
-                    // item.removeAttribute("required");
                 }
             });
 
             event.preventDefault();
             form.append(statusMessage);
+            applyAnimPreloader(form);
             const formData = new FormData(form);
             let body = {};
 
@@ -405,8 +410,10 @@ window.addEventListener("DOMContentLoaded", () => {
             });
             postData(body, () => {
                 statusMessage.textContent = successMessage;
+                form.lastChild.remove();
             }, error => {
                 statusMessage.textContent = errorMessage;
+                form.lastChild.remove();
                 console.error(error);
             });
         });
@@ -414,4 +421,5 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     formHandler();
+
 });
