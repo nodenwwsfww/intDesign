@@ -396,13 +396,6 @@ window.addEventListener("DOMContentLoaded", () => {
                 statusMessage.textContent = "";
             }
 
-            [...form.querySelectorAll("input")].forEach( item => {
-                if(item.tagName.toLowerCase() === "input") {
-                    item.value = "";
-                    // item.removeAttribute("required");
-                }
-            });
-
             form.append(statusMessage);
             const formData = new FormData(form);
             let body = {};
@@ -412,9 +405,21 @@ window.addEventListener("DOMContentLoaded", () => {
             });
             postData(body, () => {
                 statusMessage.textContent = successMessage;
+                [...form.querySelectorAll("input")].forEach( item => {
+                    if(item.tagName.toLowerCase() === "input") {
+                        item.value = "";
+                        // item.removeAttribute("required");
+                    }
+                });
             }, error => {
                 statusMessage.textContent = errorMessage;
                 console.error(error);
+                [...form.querySelectorAll("input")].forEach( item => {
+                    if(item.tagName.toLowerCase() === "input") {
+                        item.value = "";
+                        // item.removeAttribute("required");
+                    }
+                });
             });
         });
 
