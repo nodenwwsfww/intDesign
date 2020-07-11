@@ -1182,8 +1182,6 @@ footer .web {
 }
 /*
 */
-$spinkit-size: 4em !default;
-$spinkit-spinner-color: #337ab7 !default;
 
 body {
   background-color: #1d1f20;
@@ -1196,49 +1194,4 @@ body {
 
 section {
   flex: 1 1 25%;  
-}
-.sk-wandering-cubes {
-  $animationDuration: 1.8s;
-
-  width: $spinkit-size;
-  height: $spinkit-size;
-  position: relative;
-  margin: auto;
-
-  .sk-cube {
-    background-color: $spinkit-spinner-color;
-    width: ($spinkit-size / 4);
-    height: ($spinkit-size / 4);
-    position: absolute;
-    top: 0;
-    left: 0;
-    animation: sk-wandering-cubes $animationDuration ease-in-out #{-$animationDuration} infinite both;
-  }
-
-  .sk-cube-2 {
-    animation-delay: (-$animationDuration / 2);
-  }
-}
-
-@keyframes sk-wandering-cubes {
-  $cubeDistance: ($spinkit-size / 2);
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: translateX($cubeDistance) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    /* Hack to make FF rotate in the right direction */
-    transform: translateX($cubeDistance) translateY($cubeDistance) rotate(-179deg);
-  }
-  50.1% {
-    transform: translateX($cubeDistance) translateY($cubeDistance) rotate(-180deg);
-  }
-  75% {
-    transform: translateX(0) translateY($cubeDistance) rotate(-270deg) scale(0.5);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
 }
