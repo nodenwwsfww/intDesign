@@ -303,13 +303,6 @@ window.addEventListener("DOMContentLoaded", () => {
             totalValue = document.getElementById("total"); // срок исполнения
 
 
-
-        const inputValidation = target => {
-
-            if (target.tagName === "INPUT") {
-                target.value = target.value.replace(/\D/, "");
-            }
-        };
         const calculateSum = () => {
             let totalSum = 0;
             const typeValue = +calculateType.value,
@@ -337,9 +330,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const target = event.target;
 
             if (target.tagName === "INPUT" || target.tagName === "SELECT") {
-                inputValidation(target);
                 calculateSum();
-
             }
 
         });
@@ -392,6 +383,8 @@ window.addEventListener("DOMContentLoaded", () => {
             if(event.target.tagName.toLowerCase() !== "form") {
                 return;
             }
+            event.preventDefault();
+
             const form = event.target;
             [...form.querySelectorAll("input")].forEach( item => {
                 if(item.tagName.toLowerCase() === "input") {
@@ -399,7 +392,12 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            event.preventDefault();
+            // Удаляем старое сообщение состояние запроса, перед созданием нового сообщения
+            if(statusMessage === form.lastElementChild) {
+                form.lastElementChild.remove();
+                statusMessage.textContent = "";
+            }
+            
             form.append(statusMessage);
             applyAnimPreloader(form);
             const formData = new FormData(form);
@@ -421,5 +419,4 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     formHandler();
-
 });
