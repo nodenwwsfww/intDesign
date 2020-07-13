@@ -357,26 +357,26 @@ window.addEventListener("DOMContentLoaded", () => {
                     <div class="cube2"></div>
                 </div>`);
         };
-        const postData = (body, succesNotif, errorNotif) => {
-            const request = new XMLHttpRequest();
+        const postData = body => {
+            return new Promise( (resolve, reject) => {
+                const request = new XMLHttpRequest();
 
-            request.addEventListener("readystatechange", () => {
+                request.addEventListener("readystatechange", () => {
 
-                if (request.readyState !== 4) {
-                    return;
-                }
-                if (request.status === 200) {
-                    succesNotif();
-                    statusMessage.textContent = successMessage;
-                } else {
-                    errorNotif(request.status);
-                    statusMessage.textContent = errorMessage;
-                }
+                    if (request.readyState !== 4) {
+                        return;
+                    }
+                    if (request.status === 200) {
+                        resolve();
+                    } else {
+                        reject(request.status);
+                    }
+                });
+
+                request.open("POST", "../server.php");
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify(body));
             });
-
-            request.open("POST", "../server.php");
-            request.setRequestHeader("Content-Type", "application/json");
-            request.send(JSON.stringify(body));
         };
 
         document.body.addEventListener("submit", event => {
@@ -401,20 +401,20 @@ window.addEventListener("DOMContentLoaded", () => {
             formData.forEach((val, key) => {
                 body[key] = val;
             });
-            postData(body, () => {
+
+            postData(body)
+            .then(() => {
                 statusMessage.textContent = successMessage;
-                form.lastChild.remove();
-                
+                form.lastElementChild.remove();
                 [...form.querySelectorAll("input")].forEach( item => {
                     if(item.tagName.toLowerCase() === "input") {
                         item.value = "";
                     }
                 });
-            }, error => {
+            })
+            .catch(error => {
                 statusMessage.textContent = errorMessage;
-                form.lastChild.remove();
                 console.error(error);
-
                 [...form.querySelectorAll("input")].forEach( item => {
                     if(item.tagName.toLowerCase() === "input") {
                         item.value = "";
