@@ -351,36 +351,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
         const applyAnimPreloader = form => {
-            form.insertAdjacentHTML("beforeend",`   
+            form.insertAdjacentHTML("beforeend", `   
                 <div class="spinner">
                     <div class="cube1"></div>
                     <div class="cube2"></div>
                 </div>`);
         };
         const postData = body => {
-            return new Promise( (resolve, reject) => {
-                const request = new XMLHttpRequest();
-
-                request.addEventListener("readystatechange", () => {
-
-                    if (request.readyState !== 4) {
-                        return;
-                    }
-                    if (request.status === 200) {
-                        resolve();
-                    } else {
-                        reject(request.status);
-                    }
-                });
-
-                request.open("POST", "../server.php");
-                request.setRequestHeader("Content-Type", "application/json");
-                request.send(JSON.stringify(body));
+            return fetch("../server.php", {
+                method: "POST",
+                mode: "same-origin",
+                cache: "default",
+                headers: {
+                    "Form-Data": "multipart/form-data"
+                },
+                credentials: "include",
+                body: body, // formData
             });
         };
 
         document.body.addEventListener("submit", event => {
-            if(event.target.tagName.toLowerCase() !== "form") {
+            if (event.target.tagName.toLowerCase() !== "form") {
                 return;
             }
             event.preventDefault();
@@ -388,39 +379,36 @@ window.addEventListener("DOMContentLoaded", () => {
             const form = event.target;
 
             // Удаляем старое сообщение состояние запроса, перед созданием нового сообщения
-            if(statusMessage === form.lastElementChild) {
+            if (statusMessage === form.lastElementChild) {
                 form.lastElementChild.remove();
                 statusMessage.textContent = "";
             }
-            
+
             form.append(statusMessage);
             applyAnimPreloader(form);
-            const formData = new FormData(form);
-            let body = {};
 
-            formData.forEach((val, key) => {
-                body[key] = val;
-            });
-
-            postData(body)
-            .then(() => {
-                statusMessage.textContent = successMessage;
-                form.lastElementChild.remove();
-                [...form.querySelectorAll("input")].forEach( item => {
-                    if(item.tagName.toLowerCase() === "input") {
-                        item.value = "";
+            postData(new FormData(form))
+                .then(response => {
+                    if (response.status !== 200) {
+                        throw new Error("invalid server response status");
                     }
+                    statusMessage.textContent = successMessage;
+                    form.lastElementChild.remove();
+                    [...form.querySelectorAll("input")].forEach(item => {
+                        if (item.tagName.toLowerCase() === "input") {
+                            item.value = "";
+                        }
+                    });
+                })
+                .catch(error => {
+                    statusMessage.textContent = errorMessage;
+                    console.error(error);
+                    [...form.querySelectorAll("input")].forEach(item => {
+                        if (item.tagName.toLowerCase() === "input") {
+                            item.value = "";
+                        }
+                    });
                 });
-            })
-            .catch(error => {
-                statusMessage.textContent = errorMessage;
-                console.error(error);
-                [...form.querySelectorAll("input")].forEach( item => {
-                    if(item.tagName.toLowerCase() === "input") {
-                        item.value = "";
-                    }
-                });
-            });
         });
 
     };
