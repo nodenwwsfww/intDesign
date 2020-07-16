@@ -2,6 +2,7 @@
 "use strict";
 import "@babel/polyfill";
 
+import "element-remove-polyfill";
 import "mdn-polyfills/Node.prototype.append";
 
 import "es6-promise";
