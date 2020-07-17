@@ -7,7 +7,7 @@ import "mdn-polyfills/Node.prototype.append";
 import "es6-promise";
 import "formdata-polyfill";
 import "fetch-polyfill";
-import "element-remove-polyfill";
+import "remove-polyfill";
 import elementClosest from "element-closest";
 elementClosest(window);
 import "nodelist-foreach-polyfill";
