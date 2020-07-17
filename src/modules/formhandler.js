@@ -29,6 +29,23 @@ const formHandler = () => {
         });
     };
 
+    const isEmptyFields = form => {
+        /* Проверка данных формы на пустоту */
+        let emptyStatus = false;
+        [...form.querySelectorAll("input")].forEach(item => {
+            if (item.tagName.toLowerCase() !== "input") return;
+
+            if (!item.value.trim()) {
+                item.style.border = "2px solid red";
+                emptyStatus = true;
+            } else {
+                item.style.border = "";
+            }
+        });
+
+        return emptyStatus;
+    };
+
     document.body.addEventListener("submit", event => {
         if (event.target.tagName.toLowerCase() !== "form") {
             return;
@@ -36,6 +53,10 @@ const formHandler = () => {
         event.preventDefault();
 
         const form = event.target;
+
+        if (isEmptyFields(form)) {
+            return;
+        }
 
         // Удаляем старое сообщение состояние запроса, перед созданием нового сообщения
         if (statusMessage === form.lastElementChild) {
@@ -53,15 +74,12 @@ const formHandler = () => {
                 }
                 statusMessage.textContent = successMessage;
                 form.lastElementChild.remove();
-                [...form.querySelectorAll("input")].forEach(item => {
-                    if (item.tagName.toLowerCase() === "input") {
-                        item.value = "";
-                    }
-                });
             })
             .catch(error => {
                 statusMessage.textContent = errorMessage;
                 console.error(error);
+            })
+            .finally(() => {
                 [...form.querySelectorAll("input")].forEach(item => {
                     if (item.tagName.toLowerCase() === "input") {
                         item.value = "";
